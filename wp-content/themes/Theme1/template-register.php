@@ -2,64 +2,89 @@
 /*Template name: Registrace */
 get_header();
 
-global $wpdb;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') :
 
-if ($_POST) {
+    $errorMessage = "";
+    $created = false;
 
-    $email = $wpdb->escape($_POST['email']);
-    $jmeno = $wpdb->escape($_POST['jmeno']);
-    $heslo = $wpdb->escape($_POST['heslo']);
-    $heslo2 = $wpdb->escape($_POST['heslo2']);
+    $email = getFilter(INPUT_POST, "email");
+    $firstName = getFilter(INPUT_POST, "krestnijmeno");
+    $lastName = getFilter(INPUT_POST, "prijmeni");
+    $heslo = getFilter(INPUT_POST, "heslo");
+    $heslo2 = getFilter(INPUT_POST, "heslo2");
 
-    $error = array();
+    $newUserArg = array(
+        "user_pass" => $heslo,
+        "user_login" => remove_accents(strtolower(str_replace(" ", "", $firstName . " " . $lastName))),
+        "user_nicename" => remove_accents(strtolower(str_replace(" ", "", $firstName . " " . $lastName))),
+        "user_email" => $email,
+        "first_name" => $firstName,
+        "last_name" => $lastName,
+        "role" => "subscriber"
+    );
 
-    if(strpos($jmeno, ' ')!==false){
-        $error['jmeno_space'] = "Jméno nesmí obsahovat mezeru";
-    }
+    $newUser = wp_insert_user($newUserArg);
+    var_dump($newUser);
 
-    if(empty($jmeno)){
-        $error['jmeno_empty'] = "Jméno je povinné";
-    }
+    $mailExists = email_exists($email);
+    if (!$mailExists) :
+        if (!is_wp_error($newUser)) :
+            $errorMessage = "Uživatel byl vytvořen";
+            $created = true;
+            $userData = get_user_by("email", $email);
+            $passwordCheck = wp_check_password($heslo, $userData->user_pass, $email);
+            if ($passwordCheck) :
+                $userMeta = get_user_meta($mailExists);
+                $errorMessage = "";
+                $creds = array(
+                    "user_login" => $jmeno,
+                    "user_password" => $heslo,
+                    "remember" => true
+                );
 
-    if(username_exists($jmeno)){
-        $error['jmeno_exist'] = "Jméno již existuje";
-    }
-
-    if(!is_email($email)){
-        $error['email_valid'] = "Email nemá správné hodnoty";
-    }
-
-    if(email_exists($email)){
-        $error['email_exist'] = "Email je již zabrán";
-    }
-
-    if(strcmp($heslo , $heslo2) !==0) {
-        $error['heslo'] = "Hesla se neshodují";
-    }
-
-    if(count($error) ==0){
-        wp_create_user($jmeno, $heslo, $email);
-        echo "Uživatel byl vytvořen";
-        exit();
-    }else{
-        print_r($error);
-    }
-}
+                $login = wp_signon($creds, false);
+                if (is_wp_error($login)) :
+                    $errorMessage = $login->get_error_message();
+                endif;
+                if ($login) :
+                    $errorMessage = "Uživatel byl úspěšně vytvořen";
+                endif;
+            endif;
+        else :
+            $errorMessage = "Uživatel nebyl vytvořen.";
+            $created = false;
+        endif;
+    else :
+        $emailError = true;
+        $errorMessage = "E-mail existuje.";
+    endif;
+//} else {
+//print_r($error);
+//}
+endif;
 
 ?>
 
 <main>
     <div class="register">
         <form method="POST">
-        <h1>Registrovat</h1>
+            <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
+                <div class="errorblock <?php if ($created) : ?> green <?php else : ?> red <?php endif; ?>">
+                    <?php echo $errorMessage; ?>
+                </div>
+            <?php endif; ?>
+            <h1>Registrovat</h1>
+
+            <div class="register-div">
+                <input type="text" name="krestnijmeno" id="krestnijmeno" placeholder="Křestní jméno">
+            </div>
+            <div class="register-div">
+                <input type="text" name="prijmeni" id="prijmeni" placeholder="Příjmení">
+            </div>
+
             <div class="register-div">
                 <input type="email" name="email" id="email" placeholder="E-mail">
             </div>
-
-            <div class="register-div">
-                <input type="text" name="jmeno" id="jmeno" placeholder="Uživatelské jméno">
-            </div>
-
 
             <div class="register-div">
                 <input type="password" name="heslo" id="heslo" placeholder="Heslo">
@@ -69,8 +94,7 @@ if ($_POST) {
                 <input type="password" name="heslo2" id="heslo2" placeholder="Zopakujte heslo">
             </div>
             <div class="register-div">
-                    
-                    <button class="formbtn">Registrovat</button>
+                <button type="submit" class="formbtn">Registrovat</button>
             </div>
 
 

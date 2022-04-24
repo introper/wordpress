@@ -51,6 +51,7 @@ button {
   border-radius: 10px;
   padding: 3px;
   width: 300px;
+  outline: none;
 }
 .search .search-btn {
   background-color: #009dff;
@@ -157,4 +158,40 @@ button {
 }
 .register .formbtn:hover {
   background-color: #36607c;
+}
+.popup {
+  position: fixed;
+  display: block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+  background-color: #fff;
+  width: 70%;
+  height: 70%;
+  margin-top: -30px;
+  transition: all 0.5s;
+  z-index: 101;
+}
+.modal.active {
+  margin-top: 0px;
+  opacity: 1;
+  visibility: visible;
+}
+.filter-back {
+  position: absolute;
+  display: block;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 100;
+}
+.filter-back.active {
+  opacity: 1;
+  visibility: visible;
 }
