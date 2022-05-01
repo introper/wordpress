@@ -38,3 +38,47 @@ jQuery(document).ready(function ($) {
     });
 
 });
+
+$(function() {
+
+    $("form[name='POST']").validate({
+
+        rules: {
+
+            krestnijmeno: "required",
+            prijmeni: "required",
+            email: {
+                required: true,
+                email: true
+            },
+            heslo: {
+                required: true,
+                minlength: 5
+            },
+            heslo2: {
+                required: true,
+                minlength: 5,
+                equalTo: "#heslo"
+            }
+        },
+
+        messages: {
+            krestnijmeno: "Vyplňte křesní jméno",
+            prijmeni: "Vyplňte příjmení",
+            heslo: {
+                required: "Vyplňte heslo",
+                minlength: "Heslo musí obdsahovat minimálně 5 znaků"
+            },
+            email: "Zadejte platnou emailovou adresu",
+
+            heslo2: {
+                required: "Vyplňte ověření hesla",
+                minlength: "Heslo musí obdsahovat minimálně 5 znaků",
+                equalTo: "Hesla se musí shodovat"
+            },
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+});
