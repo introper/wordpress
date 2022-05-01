@@ -24,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') :
     );
 
     $newUser = wp_insert_user($newUserArg);
-    var_dump($newUser);
+    //var_dump($newUser);
 
     $mailExists = email_exists($email);
-    if (!$mailExists) :
+    if ($mailExists) :
         if (!is_wp_error($newUser)) :
             $errorMessage = "Uživatel byl vytvořen";
             $created = true;
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') :
                 $userMeta = get_user_meta($mailExists);
                 $errorMessage = "";
                 $creds = array(
-                    "user_login" => $jmeno,
+                    "user_login" => $email,
                     "user_password" => $heslo,
                     "remember" => true
                 );
@@ -56,8 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') :
         endif;
     else :
         $emailError = true;
-        $errorMessage = "E-mail existuje.";
+        $errorMessage = "E-mail již existuje.";
     endif;
+
+
 //} else {
 //print_r($error);
 //}
@@ -67,18 +69,21 @@ endif;
 
 <main>
     <div class="register">
-        <form method="POST">
-            <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
+        <form method="POST" id="POST" name="POST">
+
+            <h1>Registrovat</h1>
+
+            <!-- <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
                 <div class="errorblock <?php if ($created) : ?> green <?php else : ?> red <?php endif; ?>">
                     <?php echo $errorMessage; ?>
                 </div>
-            <?php endif; ?>
-            <h1>Registrovat</h1>
+            <?php endif; ?> -->
 
             <div class="register-div">
                 <input type="text" name="krestnijmeno" id="krestnijmeno" placeholder="Křestní jméno">
             </div>
             <div class="register-div">
+
                 <input type="text" name="prijmeni" id="prijmeni" placeholder="Příjmení">
             </div>
 
@@ -91,13 +96,16 @@ endif;
             </div>
 
             <div class="register-div">
-                <input type="password" name="heslo2" id="heslo2" placeholder="Zopakujte heslo">
+                <input type="password" name="heslo2" id="heslo2" placeholder="Ověření hesla">
             </div>
             <div class="register-div">
+
                 <button type="submit" class="formbtn">Registrovat</button>
             </div>
 
 
         </form>
     </div>
+
+
 </main>

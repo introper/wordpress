@@ -25,6 +25,7 @@ get_header();
                         </ul>
                     </div>
                 <?php endif; ?>
+                
                 <?php
 
                 $arg = array(
@@ -35,12 +36,12 @@ get_header();
                 $query = new WP_Query($arg);
                 if ($query->have_posts()) :
                 ?>
-                    <div class="flex-block">
+                    <div class="block">
                         <?php while ($query->have_posts()) : $query->the_post(); ?>
                             <div class="book-block">
                                 <a href="<?php echo get_the_permalink($post->ID); ?>" class="image-block">
                                     <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>">
-                                </a>
+                                </a> <br>
                                 <div class="text-block">
                                     <h3><?php echo get_the_title($post->ID); ?></h3>
                                     <p><?php echo get_the_excerpt($post->ID); ?></p>

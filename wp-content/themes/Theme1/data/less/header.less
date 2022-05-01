@@ -1,10 +1,12 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: "Quicksand";
 }
 
-li, a, button{
+.nav-li,
+.logo,
+.search-btn {
     text-decoration: none;
     color: white;
     font-weight: 600;
@@ -19,14 +21,17 @@ li, a, button{
     align-items: center;
     padding: 10px 8%;
 }
-.left{
+
+.left {
     width: 300px;
 }
-.nav-li{
+
+.nav-li {
     display: inline-block;
     padding: 30px 5px;
 }
-.nav-link{
+
+.nav-link {
     color: white;
     font-size: 17px;
     font-weight: bold;
@@ -36,22 +41,24 @@ li, a, button{
     border-radius: 10px;
 
 }
-.nav-link:hover{
-    
+
+.nav-link:hover {
+
     background-color: rgba(255, 255, 255, 0.199);
     transition: all 0.5s;
 }
 
-.logo{
+.logo {
     font-size: 33px;
 }
-.logo:hover{
+
+.logo:hover {
     font-size: 38px;
     transition: all 0.3s;
 }
 
-.search{
-    .search-input{
+.search {
+    .search-input {
         border: 1px solid black;
         font-size: 17px;
         border-radius: 10px;
@@ -59,23 +66,25 @@ li, a, button{
         width: 300px;
         outline: none;
     }
-    .search-btn{
+
+    .search-btn {
         background-color: #009dff;
         padding: 8px;
         border: 1px solid #009dff;
         border-radius: 10px;
         font-size: 17px;
     }
-    .search-btn:hover{
+
+    .search-btn:hover {
         background-color: rgba(255, 255, 255, 0.199);
         transition: all 0.5s;
     }
 }
 
 
-.login{
+.login {
     display: flex;
-    justify-content:center ;
+    justify-content: center;
     background-color: #d9d9d9;
     width: 400px;
     height: 400px;
@@ -88,54 +97,57 @@ li, a, button{
     align-items: center;
     text-align: right;
     border: 1px solid #353535;
-    form{
+
+    form {
         padding-top: 10px;
     }
-    h1{
+
+    h1 {
         text-align: center;
         margin-top: 10px;
     }
 
 
-.login-div{
-    margin: 40px 0px;
+    .login-div {
+        margin: 40px 0px;
+        display: flex;
+        justify-content: center;
+
+    }
+
+    input {
+        width: auto;
+        height: 30px;
+        font-size: 1rem;
+        border: 1px solid #353535;
+        border-radius: 5px;
+        padding: 3px;
+    }
+
+    .formbtn {
+
+        font-size: 20px;
+        color: #FFF;
+        cursor: pointer;
+        width: auto;
+        border: 1px solid #000;
+        border-radius: 10px;
+        padding: 7px 10px;
+        background-color: #284b63;
+
+    }
+
+    .formbtn:hover {
+        background-color: #36607c
+    }
+}
+
+.register {
     display: flex;
-    justify-content:center ;
-    
-}
-
-input{
-    width: auto;
-    height: 30px;
-    font-size: 1rem;
-    border: 1px solid #353535;
-    border-radius: 5px;
-    padding: 3px;
-}
-
-.formbtn{
-
-    font-size: 20px;
-    color: #FFF;
-    cursor: pointer;
-    width: auto;
-    border: 1px solid #000;
-    border-radius: 10px;
-    padding: 7px 10px;
-    background-color: #284b63;
-    
-}
-.formbtn:hover{
-    background-color: #36607c
-}
-}
-
-.register{
-    display: flex;
-    justify-content:center ;
+    justify-content: center;
     background-color: #d9d9d9;
     width: 400px;
-    height: 600px;
+
     margin-left: auto;
     margin-right: auto;
     margin-top: 150px;
@@ -145,18 +157,22 @@ input{
     align-items: center;
     text-align: right;
     border: 1px solid #353535;
-    h1{
+
+    h1 {
         text-align: center;
-        margin-top: 10px;
+        margin-top: 20px;
+
     }
-    .register-div{
-        margin: 40px 0px;
+
+    .register-div {
+        padding-bottom: 40px;
         display: flex;
-        justify-content:center ;
-        
+        flex-direction: column;
+        justify-content: center;
+
     }
-    
-    input{
+
+    input {
         width: auto;
         height: 30px;
         font-size: 1rem;
@@ -164,7 +180,8 @@ input{
         border-radius: 5px;
         padding: 3px;
     }
-    .formbtn{
+
+    .formbtn {
 
         font-size: 20px;
         color: #FFF;
@@ -175,19 +192,20 @@ input{
         padding: 7px 10px;
         background-color: #284b63;
     }
-    .formbtn:hover{
+
+    .formbtn:hover {
         background-color: #36607c
     }
 }
 
 
 
-.popup{
+.popup {
     position: fixed;
     display: block;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     opacity: 0;
     visibility: hidden;
     background-color: #fff;
@@ -196,12 +214,14 @@ input{
     margin-top: -30px;
     transition: all 0.5s;
     z-index: 101;
-    &.active{
+
+    &.active {
         margin-top: 0px;
         opacity: 1;
         visibility: visible;
     }
-    .exit{
+
+    .exit {
         display: block;
         position: absolute;
         right: 24px;
@@ -209,26 +229,61 @@ input{
         background-color: #000;
         width: 24px;
         height: 24px;
-        
+
     }
-    .modal-container{
+
+    .modal-container {
         padding: 80px;
     }
 }
 
-.filter-back{
+.filter-back {
     position: absolute;
     display: block;
     left: 0px;
     top: 0px;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
     z-index: 100;
-    &.active{
+
+    &.active {
         opacity: 1;
         visibility: visible;
     }
 }
+
+form .error {
+    color: #ff0000;
+    font-size: 1rem;
+    display: block;
+    text-align: left;
+}
+
+
+.block{
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    width: 80%;
+    
+}
+.book-block {
+    width: 200px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-direction: column;
+    
+
+}
+
+img {
+    width: 300px;
+    height: auto;
+    
+    border-radius: 10px;
+  }
