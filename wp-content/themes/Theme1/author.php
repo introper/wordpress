@@ -20,7 +20,7 @@ $userObject = get_queried_object();
                     <div class="flex-main">
                         <div class="menu">
                             <ul>
-                                <li><a href="">Vytvořit</a></li>
+                                <li><a href="" class="createBook" data-target="create">Vytvořit</a></li>
                             </ul>
                         </div>
                         <?php
@@ -104,11 +104,12 @@ $userObject = get_queried_object();
         $query = new WP_Query($arg);
         if ($query->have_posts()) : ?>
             <?php while ($query->have_posts()) : $query->the_post(); ?>
-
-                <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
+            <?php
+$idPost = $post->ID;
+?>
+                <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form'.$idPost])) : ?>
                     <?php
-                    var_dump("Michal je kokot");
-                    $idPost = $post->ID;
+                    
                     $desc = getFilter(INPUT_POST, "text");
                     $price = getFilter(INPUT_POST, "cena");
                     if ($desc) :
@@ -135,7 +136,7 @@ $userObject = get_queried_object();
                                 <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
                             </div>
                             <div>
-                                <button type="submit">Odeslat</button>
+                                <button type="submit" name="form<?php echo $idPost; ?>">Odeslat</button>
                             </div>
                         </form>
                     </div>
@@ -146,3 +147,90 @@ $userObject = get_queried_object();
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
+
+
+<?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
+    <?php
+    $title = getFilter(INPUT_POST, "titulek");
+    if ($title) :
+        $arg = array(
+            "author" => $userID,
+            "post_type" => "kniha",
+            "post_title" => $title,
+            "post_status" => "publish",
+
+        );
+        $newPost = wp_insert_post($arg);
+        if ($newPost) :
+            $desc = getFilter(INPUT_POST, "text");
+                    $price = getFilter(INPUT_POST, "cena");
+                    if ($desc) :
+                        update_post_meta($idPost, "popisek", $desc);
+                    endif;
+
+                    if ($price) :
+                        update_post_meta($idPost, "cena", $price);
+                    endif;
+            $wp_upload_dir = wp_upload_dir();
+            $it = 0;
+            $files = $_FILES;
+            foreach ($files as $row) :
+                if ($row != null) :
+                    $it++;
+
+
+                    if ($row["type"] == "image/png" || $row["type"] == "image/jpeg" || $row["type"] == "image/svg+xml" || $row["type"] == "application/pdf") :
+                        $wp_filetype = wp_check_filetype($row["name"], null);
+                        move_uploaded_file($row["tmp_name"], $wp_upload_dir["path"] . "/" . $row["name"]);
+                        $attach = array(
+                            "guid" => $wp_upload_dir["url"] . "/" . basename($row["name"]),
+                            "post_mime_type" => $wp_filetype["type"],
+                            "post_content" => "",
+                            'post_title'     => preg_replace('/\.[^.]+$/', '', basename($row["name"])),
+                            "post_status" => "inherit"
+                        );
+                        $filename = $wp_upload_dir['path']  . '/' . $row["name"];
+                        $image_id = wp_insert_attachment($attach, $filename);
+                        require_once(ABSPATH . 'wp-admin/includes/image.php');
+                        $attach_data = wp_generate_attachment_metadata($image_id, $filename);
+                        $url = wp_get_attachment_url($image_id);
+                        wp_update_attachment_metadata($image_id, $attach_data);
+                        if($key == 0) :
+                        set_post_thumbnail($newPost, $image_id);
+                        endif;
+                        $s = update_row("galerie", $it + 1, array("obrazek" => $image_id), $id_post);
+                    endif;
+                endif;
+            endforeach;
+        endif;
+    endif;
+
+    ?>
+<?php endif; ?>
+
+<div class="popup" id="create">
+    <div class="exit"></div>
+    <div class="modal-container">
+        <h3>Přidat novou knihu</h3>
+        <form action="" method="POST">
+            <div>
+                <input type="name" name="titulek" id="" value="<?php echo get_field("", $post->ID); ?>">
+            </div>
+            <div>
+                <textarea name="text" id="">
+                                    <?php echo get_field("popisek", $post->ID); ?>
+                </textarea>
+            </div>
+            <div>
+                <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
+            </div>
+            <div>
+                <input type="file" name="files" multiple id="">
+            </div>
+            <div>
+                <button type="submit">Odeslat</button>
+            </div>
+
+        </form>
+    </div>
+</div>

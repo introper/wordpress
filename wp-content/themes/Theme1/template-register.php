@@ -2,6 +2,8 @@
 /*Template name: Registrace */
 get_header();
 
+if (!is_user_logged_in()) :
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') :
 
     $errorMessage = "";
@@ -109,3 +111,8 @@ endif;
 
 
 </main>
+
+<?php else : ?>
+
+<?php wp_redirect(home_url()); ?>
+<?php endif; ?>

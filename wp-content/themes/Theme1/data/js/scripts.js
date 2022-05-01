@@ -14,6 +14,20 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $(document).on("click", ".createBook", function (e) {
+        e.preventDefault();
+        var href = $(this).attr("data-target");
+        var back = $(document).find(".filter-back");
+        if (href.length > 0) {
+            var element = $(document).find(".popup#" + href);
+            if (element.length > 0 && element.hasClass("popup")) {
+                element.addClass("active");
+                back.addClass("active");
+                $("html").addClass("remove");
+            }
+        }
+    });
+
     $(document).on("click", ".filter-back", function (e) {
         e.preventDefault();
         var t = $(this);
