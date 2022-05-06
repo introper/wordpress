@@ -25,7 +25,7 @@ get_header();
                         </ul>
                     </div>
                 <?php endif; ?>
-                
+
                 <?php
 
                 $arg = array(
@@ -44,8 +44,11 @@ get_header();
                                 </a> <br>
                                 <div class="text-block">
                                     <h3><?php echo get_the_title($post->ID); ?></h3>
+                                    <h3><?php echo get_field("cena", $post->ID); ?> Kč</h3>
                                     <p><?php echo get_the_excerpt($post->ID); ?></p>
-                                    <a href="<?php echo get_the_permalink($post->ID); ?>" class="btn">Zobrazit</a>
+                                    <!-- <div class="btn-block"> -->
+                                        <a href="<?php echo get_the_permalink($post->ID); ?>" class="book-btn">Zobrazit</a>
+                                    <!-- </div> -->
                                 </div>
                             </div>
                         <?php endwhile; ?>
