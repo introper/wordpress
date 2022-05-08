@@ -11,7 +11,7 @@ get_header();
 
     <section class="main-section">
         <div class="container">
-            <h2>Seznam knih</h2>
+            <h2 class="seznam">Seznam knih</h2>
             <div class="main-flex">
                 <?php $categories = get_terms("kategorie", array("hide_empty" => false)); ?>
                 <?php if ($categories) : ?>
@@ -19,7 +19,7 @@ get_header();
                         <ul>
                             <?php foreach ($categories as $item) : ?>
                                 <?php if ($item) : ?>
-                                    <li><a href="<?php echo get_term_link($item->term_id); ?>"><?php echo $item->name; ?></a></li>
+                                    <li><a id="menu-a" href="<?php echo get_term_link($item->term_id); ?>"><?php echo $item->name; ?></a></li>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
@@ -38,7 +38,7 @@ get_header();
                 ?>
                     <div class="block">
                         <?php while ($query->have_posts()) : $query->the_post(); ?>
-                            <div class="book-block">
+                            <div class="book-block2">
                                 <a href="<?php echo get_the_permalink($post->ID); ?>" class="image-block">
                                     <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>">
                                 </a> <br>

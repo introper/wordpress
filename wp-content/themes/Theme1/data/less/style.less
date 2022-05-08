@@ -11,6 +11,16 @@ a {
     font-family: "Quicksand";
 }
 
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1620px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
 .nav-li,
 .logo,
 .search-btn {
@@ -206,8 +216,6 @@ a {
     }
 }
 
-
-
 .popup {
     position: fixed;
     display: block;
@@ -234,14 +242,69 @@ a {
         position: absolute;
         right: 24px;
         top: 24px;
-        background-color: #000;
-        width: 24px;
-        height: 24px;
+        width: 34px;
+        height: 34px;
+
+        h2 {
+            font-size: 34px;
+        }
 
     }
 
     .modal-container {
         padding: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        h3 {
+            padding-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .popisek {
+
+            border: 1px solid black;
+            border-radius: 10px;
+            max-width: 200px;
+            max-height: 100px;
+            min-height: 100px;
+            min-width: 200px;
+        }
+
+        h4 {
+            font-size: 1.4rem;
+            padding-bottom: 10px;
+        }
+
+        .kat{
+            display: block;
+        }
+        .kategoire {
+            display: block;
+            border: 1px solid black;
+            outline: none;
+            border-radius: 5px;
+        }
+
+        .post-btn {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #FFF;
+            cursor: pointer;
+            width: auto;
+            border: 1px solid #000;
+            border-radius: 10px;
+            padding: 7px 10px;
+            background-color: #284b63;
+
+        }
+
+        .post-btn:hover {
+            background-color: #36607c
+        }
+
     }
 }
 
@@ -275,16 +338,17 @@ form .error {
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-gap: 32px;
     justify-content: center;
-    width: 80%;
     float: right;
     margin: 30px 20px;
 
 }
 
 .book-block {
-    width: 300px;
+    width: 100%;
     display: flex;
+
     justify-content: center;
     //align-items: center;
     flex-direction: column;
@@ -294,7 +358,8 @@ form .error {
     transform: translateX(0px);
     transition: 0.5s all;
 }
-.book-block:hover{
+
+.book-block:hover {
     box-shadow: 5px 5px 10px 1px rgba(58, 58, 58, 0.562);
     transform: translateY(-10px);
 
@@ -305,10 +370,10 @@ form .error {
     display: block;
     margin-bottom: 20px;
     margin-left: 20px;
-    
+
 }
 
-.book-btn{
+.book-btn {
     font-size: 20px;
     color: #009dff;
     cursor: pointer;
@@ -317,8 +382,8 @@ form .error {
     padding: 7px 10px;
 }
 
-.book-btn:hover{
-color: red;
+.book-btn:hover {
+    color: red;
 }
 
 
@@ -328,21 +393,101 @@ color: red;
 // }
 
 img {
-    width: 300px;
+    display: block;
+    position: relative;
+    object-fit: cover;
+    width: 100%;
     height: 200px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
-.menu {
-    float: left;
+.block-2 {
 
-}
-
-.block-2{
-    display: block;
+    grid-gap: 32px;
     justify-content: center;
     float: left;
     margin: 30px 20px;
 
+}
+
+.book-block2 {
+    width: 100%;
+    display: flex;
+
+    justify-content: center;
+    //align-items: center;
+    flex-direction: column;
+    border: 1px solid rgb(218, 215, 215);
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    transform: translateX(0px);
+    transition: 0.5s all;
+}
+
+.book-block2:hover {
+    box-shadow: 5px 5px 10px 1px rgba(58, 58, 58, 0.562);
+    transform: translateY(-10px);
+
+}
+
+
+.menu {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #009dff;
+    float: left;
+
+    li {
+        padding: 5px 0px 0px 0px;
+        list-style: none;
+        width: 100px;
+    }
+
+    a {
+        color: #009dff;
+        text-decoration: none;
+
+    }
+
+}
+
+.menu a:hover {
+    color: red;
+
+}
+
+.seznam {
+    font-size: 2rem;
+}
+
+.back-btn {
+    color: #009dff;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 2rem;
+}
+
+.detail-img {
+    width: 500px;
+    height: 600px;
+    border-radius: 0px;
+}
+
+.detail-div {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+
+}
+
+.text-block2 {
+    display: block;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    float: right;
+}
+
+.text-detail {
+    margin-bottom: 20px;
 }

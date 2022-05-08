@@ -3,6 +3,8 @@
 
 add_theme_support('post-thumbnails', array("post","kniha"));
 
+add_theme_support('post-formats', array("post","kniha"));
+
 function cpt_kniha()
 {
     $labels = array(
@@ -27,7 +29,7 @@ function cpt_kniha()
         'rewrite' => array('slug' => 'kniha'),
         'capability_type' => 'post',
         'has_archive' => true,
-        'hierarchical' => false,
+        'hierarchical' => true,
         'menu_position' => null,
         'supports' => array('title', "page-attributes", "post-formats", "thumbnail","editor"),
         "show_in_rest" => true

@@ -4,6 +4,7 @@ get_header();
 
 $id =  get_queried_object_id();
 $userID = $id;
+var_dump($userID);
 $userObject = get_queried_object();
 
 ?>
@@ -13,7 +14,7 @@ $userObject = get_queried_object();
 
     <section class="main-section">
         <div class="container">
-            <h2>Seznam knih uživatele <strong><?php echo $userObject->first_name . " " . $userObject->last_name; ?></strong></h2>
+            <h2>Seznam knih uživatele <strong><?php echo $userObject->user_nicename; ?></strong></h2>
             <?php if (is_user_logged_in()) : ?>
                 <?php $current = wp_get_current_user(); ?>
                 <?php if ($current->ID == $userID) : ?>
@@ -33,15 +34,16 @@ $userObject = get_queried_object();
                         $query = new WP_Query($arg);
                         if ($query->have_posts()) :
                         ?>
-                            <div class="flex-block">
+                            <div class="block">
 
                                 <?php while ($query->have_posts()) : $query->the_post(); ?>
                                     <div class="book-block editable" data-target="<?php echo $post->post_name; ?>">
                                         <a href="<?php echo get_the_permalink($post->ID); ?>" class="image-block">
-                                            <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>">
+                                            <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>" />
                                         </a>
                                         <div class="text-block">
                                             <h3><?php echo get_the_title($post->ID); ?></h3>
+                                            <h3><?php echo get_field("cena", $post->ID); ?> Kč</h3>
                                             <p><?php echo get_the_excerpt($post->ID); ?></p>
                                             <a href="<?php echo get_the_permalink($post->ID); ?>" class="btn">Zobrazit</a>
                                         </div>
@@ -71,7 +73,7 @@ $userObject = get_queried_object();
                         <?php while ($query->have_posts()) : $query->the_post(); ?>
                             <div class="book-block">
                                 <a href="<?php echo get_the_permalink($post->ID); ?>" class="image-block">
-                                    <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>">
+                                    <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>" />
                                 </a>
                                 <div class="text-block">
                                     <h3><?php echo get_the_title($post->ID); ?></h3>
@@ -104,14 +106,18 @@ $userObject = get_queried_object();
         $query = new WP_Query($arg);
         if ($query->have_posts()) : ?>
             <?php while ($query->have_posts()) : $query->the_post(); ?>
-            <?php
-$idPost = $post->ID;
-?>
-                <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form'.$idPost])) : ?>
+                <?php
+                $idPost = $post->ID;
+                ?>
+                <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form' . $idPost])) : ?>
                     <?php
-                    
+
                     $desc = getFilter(INPUT_POST, "text");
                     $price = getFilter(INPUT_POST, "cena");
+                    $cat = getFilter(INPUT_POST, "kategorie");
+                    if ($cat) :
+                        wp_set_post_categories($newPost, $cat);
+                    endif;
                     if ($desc) :
                         update_post_meta($idPost, "popisek", $desc);
                     endif;
@@ -120,23 +126,45 @@ $idPost = $post->ID;
                         update_post_meta($idPost, "cena", $price);
                     endif;
 
+                    wp_redirect(get_the_permalink());
+
                     ?>
                 <?php endif; ?>
                 <div class="popup" id="<?php echo $post->post_name; ?>">
-                    <div class="exit"></div>
+                    <div class="exit">
+                        <h2>X</h2>
+                    </div>
                     <div class="modal-container">
                         <h3>Upravit knihu <strong><?php echo get_the_title($post->ID); ?></strong></h3>
                         <form action="" method="POST">
                             <div>
-                                <textarea name="text" id="">
+                                <h4>Upravit popis knihy</h4>
+                                <textarea name="text" id="" class="popisek">
                                     <?php echo get_field("popisek", $post->ID); ?>
                                 </textarea>
                             </div>
+
                             <div>
+                                <h4>Upravit cenu knihy</h4>
                                 <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
                             </div>
+                            <div class="kat">
+                                <?php $categories = get_terms("kategorie", array("hide_empty" => false, "parent" => 0)); ?>
+                                <?php if ($categories) : ?>
+                                    <div class="menu">
+                                        <select name="kategorie" class="kategorie">
+                                            <?php foreach ($categories as $item) : ?>
+                                                <?php if ($item) : ?>
+                                                    <option value="<?php echo $item->term_id; ?>"><?php echo $item->name; ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                <?php endif; ?>
+                                <br>
+                            </div>
                             <div>
-                                <button type="submit" name="form<?php echo $idPost; ?>">Odeslat</button>
+                                <button class="post-btn" type="submit" name="form<?php echo $idPost; ?>">Odeslat</button>
                             </div>
                         </form>
                     </div>
@@ -149,7 +177,7 @@ $idPost = $post->ID;
 <?php endif; ?>
 
 
-<?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
+<?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create-book'])) : ?>
     <?php
     $title = getFilter(INPUT_POST, "titulek");
     if ($title) :
@@ -162,19 +190,23 @@ $idPost = $post->ID;
         );
         $newPost = wp_insert_post($arg);
         if ($newPost) :
-            $desc = getFilter(INPUT_POST, "text");
-                    $price = getFilter(INPUT_POST, "cena");
-                    if ($desc) :
-                        update_post_meta($idPost, "popisek", $desc);
-                    endif;
+            $desc = getFilter(INPUT_POST, "popisek");
+            $price = getFilter(INPUT_POST, "cena");
+            $cat = getFilter(INPUT_POST, "kategorie");
+            if ($cat) :
+                wp_set_post_categories($newPost, $cat);
+            endif;
+            if ($desc) :
+                update_post_meta($newPost, "popisek", $desc);
+            endif;
 
-                    if ($price) :
-                        update_post_meta($idPost, "cena", $price);
-                    endif;
+            if ($price) :
+                update_post_meta($newPost, "cena", $price);
+            endif;
             $wp_upload_dir = wp_upload_dir();
             $it = 0;
             $files = $_FILES;
-            foreach ($files as $row) :
+            foreach ($files as $key => $row) :
                 if ($row != null) :
                     $it++;
 
@@ -195,10 +227,10 @@ $idPost = $post->ID;
                         $attach_data = wp_generate_attachment_metadata($image_id, $filename);
                         $url = wp_get_attachment_url($image_id);
                         wp_update_attachment_metadata($image_id, $attach_data);
-                        if($key == 0) :
-                        set_post_thumbnail($newPost, $image_id);
+                        if ($key == 0) :
+                            set_post_thumbnail($newPost, $image_id);
                         endif;
-                        $s = update_row("galerie", $it + 1, array("obrazek" => $image_id), $id_post);
+                        $s = update_row("galerie", $it + 1, array("obrazek" => $image_id), $newPost);
                     endif;
                 endif;
             endforeach;
@@ -209,26 +241,47 @@ $idPost = $post->ID;
 <?php endif; ?>
 
 <div class="popup" id="create">
-    <div class="exit"></div>
+    <div class="exit">
+        <h2>X</h2>
+    </div>
     <div class="modal-container">
         <h3>Přidat novou knihu</h3>
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             <div>
-                <input type="name" name="titulek" id="" value="<?php echo get_field("", $post->ID); ?>">
+                <h4>Název knihy</h4>
+                <input type="name" name="titulek" id="" placeholder="Název nové knihy" value="<?php echo get_field("", $post->ID); ?>">
             </div>
             <div>
-                <textarea name="text" id="">
-                                    <?php echo get_field("popisek", $post->ID); ?>
+                <h4>Popis knihy</h4>
+                <textarea name="popisek" id="" class="popisek">
+                      <?php echo get_field("popisek", $post->ID); ?>
                 </textarea>
             </div>
             <div>
+                <h4>Cena knihy</h4>
                 <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
             </div>
             <div>
+                <h4>Vyberte fotografie</h4>
                 <input type="file" name="files" multiple id="">
             </div>
+            <div class="kat">
+                <?php $categories = get_terms("kategorie", array("hide_empty" => false, "parent" => 0)); ?>
+                <?php if ($categories) : ?>
+                    <div class="menu">
+                        <select name="kategorie" class="kategorie">
+                            <?php foreach ($categories as $item) : ?>
+                                <?php if ($item) : ?>
+                                    <option value="<?php echo $item->term_id; ?>"><?php echo $item->name; ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+                <br>
+            </div>
             <div>
-                <button type="submit">Odeslat</button>
+                <button class="post-btn" type="submit" name="create-book">Odeslat</button>
             </div>
 
         </form>
