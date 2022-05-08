@@ -40,12 +40,12 @@ $userObject = get_queried_object();
                                     <div class="book-block editable" data-target="<?php echo $post->post_name; ?>">
                                         <a href="<?php echo get_the_permalink($post->ID); ?>" class="image-block">
                                             <img src="<?php echo get_the_post_thumbnail_url($post->ID); ?>" alt="<?php echo get_the_title($post->ID); ?>" />
-                                        </a>
+                                        </a><br>
                                         <div class="text-block">
                                             <h3><?php echo get_the_title($post->ID); ?></h3>
                                             <h3><?php echo get_field("cena", $post->ID); ?> Kč</h3>
                                             <p><?php echo get_the_excerpt($post->ID); ?></p>
-                                            <a href="<?php echo get_the_permalink($post->ID); ?>" class="btn">Zobrazit</a>
+                                            <a href="<?php echo get_the_permalink($post->ID); ?>" class="book-btn">Upravit</a>
                                         </div>
                                     </div>
                                 <?php endwhile; ?>
@@ -262,7 +262,7 @@ $userObject = get_queried_object();
                 <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
             </div>
             <div>
-                <h4>Vyberte fotografie</h4>
+                <h4>Vyberte fotografii</h4>
                 <input type="file" name="files" multiple id="">
             </div>
             <div class="kat">
