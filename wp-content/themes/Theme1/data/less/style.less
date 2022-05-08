@@ -291,13 +291,15 @@ form .error {
     border: 1px solid rgb(218, 215, 215);
     border-radius: 10px;
     background-color: rgb(255, 255, 255);
-
+    transform: translateX(0px);
+    transition: 0.5s all;
+}
+.book-block:hover{
+    box-shadow: 5px 5px 10px 1px rgba(58, 58, 58, 0.562);
+    transform: translateY(-10px);
 
 }
 
-.book-block:hover {
-    //background-color: #009dff;
-}
 
 .text-block {
     display: block;
@@ -327,12 +329,20 @@ color: red;
 
 img {
     width: 300px;
-    height: auto;
+    height: 200px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
 .menu {
     float: left;
+
+}
+
+.block-2{
+    display: block;
+    justify-content: center;
+    float: left;
+    margin: 30px 20px;
 
 }
