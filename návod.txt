@@ -1,0 +1,6 @@
+V pořítači musí být nainstalovaný xampp (wordpress nejde spustit pokud localhost je s portem například localhost:5555/wordpress, tak se nespustí)
+Poté co stáhneme složku, tak soubory vložíme do Xampp/htdocs/wordpress
+V souboru wp-confing.php nastavíme heslo na localhost jestli máme, jinak neměníme
+Poté nastavíme databázi, ve složce Db je soubor který naimportujeme do tabulky se stejným názvem ("brozovic")
+nyní můžeme wordpress zapnout
+pro plné využití se budete muset zaregistrovat
