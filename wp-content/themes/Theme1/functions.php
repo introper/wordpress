@@ -5,6 +5,7 @@ add_theme_support('post-thumbnails', array("post","kniha"));
 
 add_theme_support('post-formats', array("post","kniha"));
 
+
 function cpt_kniha()
 {
     $labels = array(

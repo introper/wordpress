@@ -4,7 +4,6 @@ get_header();
 
 $id =  get_queried_object_id();
 $userID = $id;
-var_dump($userID);
 $userObject = get_queried_object();
 
 ?>
@@ -126,7 +125,7 @@ $userObject = get_queried_object();
                         update_post_meta($idPost, "cena", $price);
                     endif;
 
-                    wp_redirect(get_the_permalink());
+                    wp_redirect(get_author_posts_url($userID));
 
                     ?>
                 <?php endif; ?>
@@ -148,7 +147,7 @@ $userObject = get_queried_object();
                                 <h4>Upravit cenu knihy</h4>
                                 <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
                             </div>
-                            <div class="kat">
+                            <!-- <div class="kat">
                                 <?php $categories = get_terms("kategorie", array("hide_empty" => false, "parent" => 0)); ?>
                                 <?php if ($categories) : ?>
                                     <div class="menu">
@@ -162,7 +161,7 @@ $userObject = get_queried_object();
                                     </div>
                                 <?php endif; ?>
                                 <br>
-                            </div>
+                            </div> -->
                             <div>
                                 <button class="post-btn" type="submit" name="form<?php echo $idPost; ?>">Odeslat</button>
                             </div>
@@ -203,6 +202,7 @@ $userObject = get_queried_object();
             if ($price) :
                 update_post_meta($newPost, "cena", $price);
             endif;
+
             $wp_upload_dir = wp_upload_dir();
             $it = 0;
             $files = $_FILES;
@@ -234,6 +234,8 @@ $userObject = get_queried_object();
                     endif;
                 endif;
             endforeach;
+
+            wp_redirect(get_author_posts_url($userID));
         endif;
     endif;
 
@@ -254,18 +256,18 @@ $userObject = get_queried_object();
             <div>
                 <h4>Popis knihy</h4>
                 <textarea name="popisek" id="" class="popisek">
-                      <?php echo get_field("popisek", $post->ID); ?>
+                      <?php echo get_field("", $post->ID); ?>
                 </textarea>
             </div>
             <div>
                 <h4>Cena knihy</h4>
-                <input type="number" name="cena" value="<?php echo get_field("cena", $post->ID); ?>" id="">
+                <input type="number" name="cena" value="<?php echo get_field("", $post->ID); ?>" id="">
             </div>
             <div>
                 <h4>Vyberte fotografii</h4>
                 <input type="file" name="files" multiple id="">
             </div>
-            <div class="kat">
+            <!-- <div class="kat">
                 <?php $categories = get_terms("kategorie", array("hide_empty" => false, "parent" => 0)); ?>
                 <?php if ($categories) : ?>
                     <div class="menu">
@@ -279,7 +281,7 @@ $userObject = get_queried_object();
                     </div>
                 <?php endif; ?>
                 <br>
-            </div>
+            </div> -->
             <div>
                 <button class="post-btn" type="submit" name="create-book">Odeslat</button>
             </div>

@@ -15,7 +15,7 @@ get_header();
             <div class="main-flex">
                 <?php $categories = get_terms("kategorie", array("hide_empty" => false)); ?>
                 <?php if ($categories) : ?>
-                    <div class="menu">
+                    <!-- <div class="menu">
                         <ul>
                             <?php foreach ($categories as $item) : ?>
                                 <?php if ($item) : ?>
@@ -23,7 +23,7 @@ get_header();
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
-                    </div>
+                    </div> -->
                 <?php endif; ?>
 
                 <?php
