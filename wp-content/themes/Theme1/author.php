@@ -178,6 +178,27 @@ $userObject = get_queried_object();
 
 <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create-book'])) : ?>
     <?php
+    //var_dump($_FILES);
+    $files = $_FILES;
+    $arrayHelp = array();
+    foreach ($files["files"]["type"] as $key => $item) :
+        $arrayHelp[$key] = array();
+    endforeach;
+
+    foreach ($files["files"]["type"] as $key => $item) :
+        $arrayHelp[$key]["type"] = $item;
+    endforeach;
+
+    foreach ($files["files"]["name"] as $key => $item) :
+        $arrayHelp[$key]["name"] = $item;
+    endforeach;
+
+    foreach ($files["files"]["tmp_name"] as $key => $item) :
+        $arrayHelp[$key]["tmp_name"] = $item;
+    endforeach;
+    //name - jmeno
+    //type - typ
+    //tmp_name - url
     $title = getFilter(INPUT_POST, "titulek");
     if ($title) :
         $arg = array(
@@ -205,8 +226,8 @@ $userObject = get_queried_object();
 
             $wp_upload_dir = wp_upload_dir();
             $it = 0;
-            $files = $_FILES;
-            foreach ($files as $key => $row) :
+
+            foreach ($arrayHelp as $key => $row) :
                 if ($row != null) :
                     $it++;
 
@@ -265,7 +286,7 @@ $userObject = get_queried_object();
             </div>
             <div>
                 <h4>Vyberte fotografii</h4>
-                <input type="file" name="files" multiple id="">
+                <input type="file" name="files[]" multiple="multiple" id="">
             </div>
             <!-- <div class="kat">
                 <?php $categories = get_terms("kategorie", array("hide_empty" => false, "parent" => 0)); ?>
